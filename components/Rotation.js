@@ -5,12 +5,12 @@ AFRAME.registerComponent("terrain-rotation-reader", {
   },
   init: function () {
     window.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowRight") {
+      if (e.key === "d") {
         if (this.data.speedOfRoation < 0.1) {
           this.data.speedOfRoation += 0.01;
         }
       }
-      if (e.key === "ArrowLeft") {
+      if (e.key === "a") {
         if (this.data.speedOfRoation > -0.1) {
           this.data.speedOfRoation -= 0.01;
         }
@@ -28,6 +28,62 @@ AFRAME.registerComponent("terrain-rotation-reader", {
       z: mapRotation.z
     });
   }
+});
+
+AFRAME.registerComponent("plane-rotation-reader", {
+  schema: {
+    speedOfRoation: { type: "number", default: 0 },
+    speedOfAscent: {type: "number", default:0}    
+  },
+  init: function () {
+    window.addEventListener("keydown", (e) => {
+      this.data.speedOfRoation = this.el.getAttribute("rotation");
+      this.data.speedOfAscent = this.el.getAttribute("position");
+
+      var planeRotation = this.data.speedOfRoation;
+      var planePosition = this.data.speedOfAscent;
+      
+      if (e.key === "d") {
+        if (planeRotation.x < 10) {
+          planeRotation.x+=0.5;
+          this.el.setAttribute("rotation", planeRotation);
+        }
+      }
+      if (e.key === "a") {
+        if (planeRotation.x > -10) {
+          planeRotation.x-=0.5;
+          this.el.setAttribute("rotation", planeRotation);
+        }
+      }
+      if (e.key === "w") {
+        if (planeRotation.z < 20) {
+          planeRotation.z += 0.5;
+          this.el.setAttribute("rotation", planeRotation);
+        }
+        if (planePosition.y < 2) {
+          planePosition.y += 0.01;
+          this.el.setAttribute("position", planePosition);
+        }
+      }
+      if (e.key === "s") {
+        if (planeRotation.z > -10) {
+          planeRotation.z -= 0.5;
+          this.el.setAttribute("rotation", planeRotation);
+        }
+        if (planePosition.y > -2) {
+          planePosition.y -= 0.01;
+          this.el.setAttribute("position", planePosition);
+        }
+      }
+    });
+
+    this.el.setAttribute("rotation", {
+      x: mapRotation.x,
+      y: mapRotation.y,
+      z: mapRotation.z
+    });
+
+  },
 });
 
 
